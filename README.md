@@ -30,7 +30,14 @@ flutter run
 to run pure flutter demo.
 
 
-- The `addtoapp` folder is an Android project which using the top package(flutterlocation) and 
+- The `addtoapp` folder is an Android project which using the top package(flutterlocation) and
+ 
 register a MethodChannel. You can using Android Studio open `addtoapp` to run this demo.
+
+```shell script
+cd flutter_module
+flutter pub get
+```
+Then sync project and you can run `addtoapp` now.
 
 
