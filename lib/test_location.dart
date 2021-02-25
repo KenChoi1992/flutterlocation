@@ -10,9 +10,8 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-
   static const MethodChannel channel =
-  const MethodChannel('com.cyg.addtoapp/flutter');
+      const MethodChannel('com.cyg.addtoapp/flutter');
 
   Offset _offset = Offset.zero;
   bool _runningWithMethodChannel = false;
@@ -49,7 +48,8 @@ class _LocationState extends State<Location> {
     RenderBox renderBox = _globalKey.currentContext.findRenderObject();
     Offset textOffset = renderBox.localToGlobal(Offset.zero);
     // !!! The offset here is different when using MethodChannel!
-    print('_getSizeAndPosition, _runningWithMethodChannel = $_runningWithMethodChannel textOffset = $textOffset');
+    print(
+        '_getSizeAndPosition, _runningWithMethodChannel = $_runningWithMethodChannel textOffset = $textOffset');
     setState(() {
       _offset = textOffset;
     });
@@ -70,7 +70,6 @@ class _LocationState extends State<Location> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16.0),
               ),
-              height: 410,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -139,11 +138,14 @@ class _LocationState extends State<Location> {
                 ],
               ),
             ),
-            Text(
-              'The offset of _globalKey is $_offset, \nRunning With MethodChannel = $_runningWithMethodChannel',
-              style: TextStyle(fontSize: 25),
-            )
           ],
+        ),
+        Center(
+          child: Text(
+            'The offset of _globalKey is $_offset, \nRunning With MethodChannel = $_runningWithMethodChannel',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
         )
       ],
     );
