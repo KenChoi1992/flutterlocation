@@ -1,16 +1,36 @@
 # flutterlocation
+A simple flutter demo shows get widget location bug.
 
-A new Flutter project.
+Generally, we can use GlobalKey and RenderBox.localToGlobal API to get location:
 
-## Getting Started
+```dart
+RenderBox renderBox = _globalKey.currentContext.findRenderObject();
+Offset textOffset = renderBox.localToGlobal(Offset.zero);
+```
 
-This project is a starting point for a Flutter application.
+Every thing works just fine EXCEPT you're not using flutter MethodChannel!
 
-A few resources to get you started if this is your first Flutter project:
+By adding flutter MethodChannel, the offset calculated by above API is different!
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Project Explain
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- The `pureflutter` folder is clean flutter demo, show the RIGHT location of a widget.
+
+Clone this project and 
+```shell script
+cd flutterlocation
+flutter pub get
+cd pureflutter
+flutter pub get
+```
+then
+```shell script
+flutter run
+```
+to run pure flutter demo.
+
+
+- The `addtoapp` folder is an Android project which using the top package(flutterlocation) and 
+register a MethodChannel. You can using Android Studio open `addtoapp` to run this demo.
+
+

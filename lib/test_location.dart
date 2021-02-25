@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// This is a simple test show widget location, which works fine for pure flutter
-/// project, however, when using this package in native project, the location
-/// is different
+/// project, however, when using this package in native project WITH flutter
+/// method channel the location is different!
 class Location extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _LocationState();
 }
 
 class _LocationState extends State<Location> {
+
+  static const MethodChannel channel =
+  const MethodChannel('com.cyg.addtoapp/flutter');
+
   Offset _offset = Offset.zero;
+  bool _runningWithMethodChannel = false;
   GlobalKey _globalKey = GlobalKey();
+
+  static Future<String> hello() async {
+    String result = '';
+    try {
+      print('call native before');
+      result = await channel.invokeMethod('callNative');
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+    return result;
+  }
 
   @override
   void initState() {
@@ -18,12 +35,21 @@ class _LocationState extends State<Location> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _getSizeAndPosition();
     });
+    hello().then((value) => _afterCallNative(value));
+  }
+
+  void _afterCallNative(String value) {
+    print('After call native, value = $value');
+    setState(() {
+      _runningWithMethodChannel = true;
+    });
   }
 
   void _getSizeAndPosition() {
     RenderBox renderBox = _globalKey.currentContext.findRenderObject();
     Offset textOffset = renderBox.localToGlobal(Offset.zero);
-    print('_getSizeAndPosition, textOffset = $textOffset');
+    // !!! The offset here is different when using MethodChannel!
+    print('_getSizeAndPosition, _runningWithMethodChannel = $_runningWithMethodChannel textOffset = $textOffset');
     setState(() {
       _offset = textOffset;
     });
@@ -114,7 +140,7 @@ class _LocationState extends State<Location> {
               ),
             ),
             Text(
-              'The offset of _globalKey is $_offset',
+              'The offset of _globalKey is $_offset, \nRunning With MethodChannel = $_runningWithMethodChannel',
               style: TextStyle(fontSize: 25),
             )
           ],
